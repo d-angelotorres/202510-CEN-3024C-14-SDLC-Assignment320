@@ -21,30 +21,51 @@ public class LibraryManagementSystem {
                 String author = parts[2];
                 books.add(new Book(id, title, author));
             }
+            System.out.println("Books loaded successfully.");
         } catch (IOException e) {
-            System.out.println("File not found.");
+            System.out.println("Error reading file.");
         }
     }
 
     public void removeBookById(int id) {
         books.removeIf(book -> book.getId() == id);
+        System.out.println("Book with ID " + id + " removed.");
+    }
+
+    public void removeBookByTitle(String title) {
+        books.removeIf(book -> book.getTitle().equalsIgnoreCase(title));
+        System.out.println("Book with title '" + title + "' removed.");
     }
 
     public void listBooks() {
-        for (Book book : books) {
-            System.out.println(book);
+        if (books.isEmpty()) {
+            System.out.println("No books in the system.");
+        } else {
+            for (Book book : books) {
+                System.out.println(book);
+            }
         }
     }
 
-    public static void main(String[] args) {
-        LibraryManagementSystem lms = new LibraryManagementSystem();
+    public void checkOutBook(String title) {
+        for (Book book : books) {
+            if (book.getTitle().equalsIgnoreCase(title)) {
+                book.checkOut();
+                System.out.println("Checked out: " + book);
+                return;
+            }
+        }
+        System.out.println("Book not found.");
+    }
 
-        // Provide the path to your books.txt file
-        String filePath = "books.txt";
-
-        lms.addBooksFromFile(filePath);
-        lms.listBooks();
-        lms.removeBookById(2);
-        lms.listBooks();
+    public void checkInBook(String title) {
+        for (Book book : books) {
+            if (book.getTitle().equalsIgnoreCase(title)) {
+                book.checkIn();
+                System.out.println("Checked in: " + book);
+                return;
+            }
+        }
+        System.out.println("Book not found.");
     }
 }
